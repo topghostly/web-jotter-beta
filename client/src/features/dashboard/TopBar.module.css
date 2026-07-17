@@ -1,0 +1,115 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--paper);
+  border-bottom: 0.5px solid var(--ink);
+}
+
+.inner {
+  max-width: 2100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-family: var(--font-note);
+}
+
+.brand img {
+  width: 30px;
+  height: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user {
+  margin-right: 6px;
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+
+.newNote {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 9px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-paper);
+  font-family: var(--font-note);
+  transition:
+    transform 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out);
+}
+
+.newNote:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-paper-hover);
+}
+
+.newNote:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out),
+    background 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+}
+
+.iconButton:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-paper);
+}
+
+.iconButton[aria-pressed="true"] {
+  background: var(--error);
+  border-color: var(--error);
+  color: var(--paper);
+}
+
+@media (max-width: 640px) {
+  .user,
+  .newNote span {
+    display: none;
+  }
+
+  .newNote {
+    width: 38px;
+    height: 38px;
+    justify-content: center;
+    padding: 0;
+  }
+}

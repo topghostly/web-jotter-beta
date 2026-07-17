@@ -1,0 +1,107 @@
+.page {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 48px 20px;
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.logo {
+  width: 52px;
+  height: auto;
+  margin-bottom: 6px;
+}
+
+.wordmark {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.tagline {
+  margin: 0;
+  font-family: var(--font-note);
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+
+/* The form card: a sheet of paper with pen-drawn edges. */
+.card {
+  position: relative;
+  width: 100%;
+  padding: 34px 30px 30px;
+  background: var(--paper-raised);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--sketch-radius);
+  box-shadow: var(--shadow-paper);
+}
+
+/* Signature: a sticky note taped to the card, message follows the toggle. */
+.sticky {
+  position: absolute;
+  top: -16px;
+  right: -18px;
+  transform: rotate(4deg);
+  padding: 12px 14px 14px;
+  max-width: 150px;
+  background: var(--sticky);
+  border-radius: 2px 2px 14px 2px / 2px 2px 12px 2px;
+  box-shadow:
+    0 4px 0 -2px var(--sticky-shadow),
+    3px 5px 8px rgba(17, 17, 17, 0.1);
+  font-family: var(--font-note);
+  font-size: 15.5px;
+  line-height: 1.25;
+  color: var(--sticky-ink);
+  animation: stick-on 320ms var(--ease-out);
+}
+
+/* The tape strip holding it down. */
+.sticky::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 46px;
+  height: 15px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: rgba(17, 17, 17, 0.08);
+  border-left: 1px dashed rgba(17, 17, 17, 0.12);
+  border-right: 1px dashed rgba(17, 17, 17, 0.12);
+}
+
+@keyframes stick-on {
+  from {
+    transform: rotate(7deg) scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(4deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .sticky {
+    right: 4px;
+  }
+}

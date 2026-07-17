@@ -1,0 +1,47 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+/* A writing line, not a box — ink underline like ruled paper. */
+.input {
+  border: none;
+  border-bottom: 1.5px solid var(--line);
+  background: transparent;
+  padding: 9px 2px;
+  font-size: 17px;
+  transition: border-color 160ms var(--ease-out);
+}
+
+.input::placeholder {
+  color: var(--ink-faint);
+  font-family: var(--font-note);
+  font-size: 17px;
+}
+
+.input:hover {
+  border-bottom-color: var(--ink-faint);
+}
+
+.input:focus {
+  outline: none;
+  border-bottom-color: var(--ink);
+}
+
+.input[aria-invalid="true"] {
+  border-bottom-color: var(--error);
+}
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--error);
+}

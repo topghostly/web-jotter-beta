@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form > button {
+  margin-top: 6px;
+}
+
+.formError {
+  margin: -6px 0 0;
+  color: var(--error);
+  font-size: 13.5px;
+  line-height: 1.4;
+}

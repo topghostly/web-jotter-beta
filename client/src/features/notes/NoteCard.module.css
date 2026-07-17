@@ -1,0 +1,158 @@
+/* A piece of paper pinned to the board.
+   --note-fs / --note-lh are set on the board per the text-size setting. */
+.card {
+  position: relative;
+  break-inside: avoid;
+  margin-bottom: 22px;
+  padding: 18px 18px 12px;
+  background-color: var(--note-white);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--sketch-radius-sm);
+  box-shadow: var(--shadow-paper);
+  transition:
+    background-color 240ms var(--ease-out),
+    border-color 240ms var(--ease-out);
+}
+
+/* Folded corner */
+.card::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(to top left, var(--fold-shade) 49%, transparent 51%);
+}
+
+/* Slight pinned-by-hand tilts across the board */
+.card:nth-child(5n + 2) {
+  rotate: 0.7deg;
+}
+
+.card:nth-child(5n + 4) {
+  rotate: -0.7deg;
+}
+
+/* ——— Paper colors ——— */
+.card[data-color="yellow"] {
+  background-color: var(--note-yellow);
+}
+
+.card[data-color="pink"] {
+  background-color: var(--note-pink);
+}
+
+.card[data-color="blue"] {
+  background-color: var(--note-blue);
+}
+
+.card[data-color="mint"] {
+  background-color: var(--note-mint);
+}
+
+/* ——— Paper types ——— */
+
+/* Ruled lines drawn under the writing itself */
+.card[data-paper="ruled"] .body {
+  min-height: calc(var(--note-lh, 28px) * 3);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 calc(var(--note-lh, 28px) - 1px),
+    var(--rule-line) calc(var(--note-lh, 28px) - 1px) var(--note-lh, 28px)
+  );
+}
+
+.card[data-paper="grid"] {
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 20px);
+}
+
+.card[data-paper="dot"] {
+  background-image: radial-gradient(var(--dot-ink) 1px, transparent 1.3px);
+  background-size: 17px 17px;
+}
+
+/* ——— Content ——— */
+.body {
+  font-family: var(--font-note);
+  font-size: var(--note-fs, 18px);
+  line-height: var(--note-lh, 28px);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  caret-color: var(--ink);
+  outline: none;
+  min-height: var(--note-lh, 28px);
+}
+
+.body:empty::before {
+  content: attr(data-placeholder);
+  color: var(--ink-faint);
+}
+
+.date {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ——— Lifecycle animations ——— */
+
+/* A fresh note sticks onto the board */
+.justAdded {
+  animation: stick-on 300ms var(--ease-out);
+}
+
+@keyframes stick-on {
+  from {
+    opacity: 0;
+    scale: 0.85;
+    rotate: 4deg;
+  }
+}
+
+/* A deleted note tears off and falls */
+.removing {
+  animation: tear-off 220ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes tear-off {
+  to {
+    opacity: 0;
+    scale: 0.8;
+    rotate: -6deg;
+    translate: 0 14px;
+  }
+}
+
+/* ——— Delete mode ——— */
+.deletable {
+  cursor: pointer;
+  animation: wobble 300ms ease-in-out infinite alternate;
+}
+
+.deletable .body {
+  pointer-events: none;
+}
+
+.deletable:hover,
+.deletable:focus-visible {
+  outline: 2px dashed var(--error);
+  outline-offset: 4px;
+}
+
+@keyframes wobble {
+  from {
+    rotate: -0.6deg;
+  }
+  to {
+    rotate: 0.6deg;
+  }
+}

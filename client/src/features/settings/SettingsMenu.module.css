@@ -1,0 +1,158 @@
+.menu {
+  position: relative;
+}
+
+.trigger {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out);
+}
+
+.trigger:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-paper);
+}
+
+.trigger[aria-expanded="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* A slip of paper dropped below the gear. */
+.panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 30;
+  width: 252px;
+  padding: 16px 18px 18px;
+  background: var(--paper-raised);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--sketch-radius-sm);
+  box-shadow: var(--shadow-paper-hover);
+  animation: drop-in 200ms var(--ease-out);
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+    rotate: 1deg;
+  }
+}
+
+.title {
+  margin: 14px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.title:first-child {
+  margin-top: 0;
+}
+
+.row,
+.rowWrap {
+  display: flex;
+  gap: 6px;
+}
+
+.rowWrap {
+  flex-wrap: wrap;
+}
+
+.between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-family: var(--font-note);
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 140ms var(--ease-out),
+    color 140ms var(--ease-out);
+}
+
+.chip:hover {
+  background: rgba(17, 17, 17, 0.06);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Text-size chips preview their own size */
+.chip[data-size="small"] {
+  font-size: 12px;
+}
+
+.chip[data-size="medium"] {
+  font-size: 14px;
+}
+
+.chip[data-size="large"] {
+  font-size: 17px;
+}
+
+.switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: background 160ms var(--ease-out);
+}
+
+.switch[aria-checked="true"] {
+  background: var(--ink);
+}
+
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  background: var(--ink);
+  transition:
+    translate 200ms var(--ease-out),
+    background 160ms var(--ease-out);
+}
+
+.switch[aria-checked="true"] .knob {
+  translate: 18px 0;
+  background: var(--paper);
+}

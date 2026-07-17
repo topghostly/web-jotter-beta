@@ -1,0 +1,466 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Jotter API",
+    "description": "Backend for the Jotter notes app. Authentication is a sliding-window JWT session delivered as an httpOnly cookie: every authenticated request re-signs the token and resets the cookie's expiry, so active users never get logged out and idle users expire after 7 days.",
+    "version": "0.1.0"
+  },
+  "servers": [
+    { "url": "http://localhost:8001", "description": "Local development" }
+  ],
+  "tags": [
+    { "name": "Meta", "description": "Non-resource endpoints" },
+    { "name": "Users", "description": "Sign up and login" },
+    { "name": "Me", "description": "The logged-in user's own profile, notes, and settings, combined" },
+    { "name": "Notes", "description": "Create, update, and delete notes" },
+    { "name": "Settings", "description": "Update the logged-in user's preferences" }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Meta"],
+        "summary": "Welcome message",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Welcome to Jotter API" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Sign up",
+        "description": "Creates a User, auto-creates a default Settings doc for them, and starts a session.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SignUpRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created, session started",
+            "headers": {
+              "Set-Cookie": {
+                "description": "jotter_session httpOnly cookie",
+                "schema": { "type": "string" }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/PublicUser" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing name, email, or password",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "409": {
+            "description": "Email already in use",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Log in",
+        "description": "Verifies email + password and starts a session.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged in, session started",
+            "headers": {
+              "Set-Cookie": {
+                "description": "jotter_session httpOnly cookie",
+                "schema": { "type": "string" }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/PublicUser" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing email or password",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "401": {
+            "description": "Invalid email or password",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": ["Me"],
+        "summary": "Get the logged-in user, their notes, and their settings",
+        "description": "Runs the three lookups in a single Promise.all. Notes come back newest-first.",
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/PublicUser" },
+                    "notes": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Note" }
+                    },
+                    "settings": { "$ref": "#/components/schemas/Settings" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated, session invalid/expired, or the user no longer exists",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Me"],
+        "summary": "Delete the logged-in user",
+        "description": "Cascades: deletes all of the user's Notes and their Settings doc, then the User, then clears the session cookie.",
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "204": { "description": "Deleted, no content" },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/notes": {
+      "post": {
+        "tags": ["Notes"],
+        "summary": "Create a note",
+        "description": "Owned by the logged-in user.",
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateNoteRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Note created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "note": { "$ref": "#/components/schemas/Note" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "content is required",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/notes/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Note's MongoDB ObjectId",
+          "schema": { "type": "string" }
+        }
+      ],
+      "patch": {
+        "tags": ["Notes"],
+        "summary": "Update a note",
+        "description": "Must be owned by the logged-in user.",
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateNoteRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Note updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "note": { "$ref": "#/components/schemas/Note" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed id or validation error",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "404": {
+            "description": "Note not found, or not owned by the caller",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Notes"],
+        "summary": "Delete a note",
+        "description": "Must be owned by the logged-in user.",
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "204": { "description": "Deleted, no content" },
+          "400": {
+            "description": "Malformed id",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "404": {
+            "description": "Note not found, or not owned by the caller",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/settings": {
+      "patch": {
+        "tags": ["Settings"],
+        "summary": "Update the logged-in user's settings",
+        "description": "Any subset of fontSize, multicolor, paper, theme. Fields left out keep their current value.",
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateSettingsRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Settings updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "settings": { "$ref": "#/components/schemas/Settings" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid enum value",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "404": {
+            "description": "Settings not found",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "jotter_session",
+        "description": "Sliding-session JWT. Set by POST /users and POST /users/login, refreshed on every authenticated request."
+      }
+    },
+    "schemas": {
+      "PublicUser": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "64f1a2b3c4d5e6f7a8b9c0d1" },
+          "name": { "type": "string", "example": "Ada Lovelace" },
+          "email": { "type": "string", "format": "email", "example": "ada@example.com" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "email", "createdAt"]
+      },
+      "Note": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string", "example": "64f1a2b3c4d5e6f7a8b9c0d2" },
+          "content": { "type": "string", "example": "remember the milk" },
+          "user": { "type": "string", "description": "ObjectId of the owning User" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["_id", "content", "user", "createdAt", "updatedAt"]
+      },
+      "Settings": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "user": { "type": "string", "description": "ObjectId of the owning User" },
+          "fontSize": {
+            "type": "string",
+            "enum": ["small", "medium", "large"],
+            "default": "medium"
+          },
+          "multicolor": { "type": "boolean", "default": true },
+          "paper": {
+            "type": "string",
+            "enum": ["random", "plain", "ruled", "grid", "dot"],
+            "default": "random"
+          },
+          "theme": {
+            "type": "string",
+            "enum": ["light", "dark"],
+            "default": "light"
+          }
+        },
+        "required": ["_id", "user", "fontSize", "multicolor", "paper", "theme"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "Email already in use" }
+        },
+        "required": ["error"]
+      },
+      "SignUpRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "Ada Lovelace" },
+          "email": { "type": "string", "format": "email", "example": "ada@example.com" },
+          "password": { "type": "string", "format": "password", "example": "s3cret-password" }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "ada@example.com" },
+          "password": { "type": "string", "format": "password", "example": "s3cret-password" }
+        },
+        "required": ["email", "password"]
+      },
+      "CreateNoteRequest": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "string", "example": "remember the milk" }
+        },
+        "required": ["content"]
+      },
+      "UpdateNoteRequest": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "string", "example": "remember the eggs" }
+        }
+      },
+      "UpdateSettingsRequest": {
+        "type": "object",
+        "properties": {
+          "fontSize": { "type": "string", "enum": ["small", "medium", "large"] },
+          "multicolor": { "type": "boolean" },
+          "paper": { "type": "string", "enum": ["random", "plain", "ruled", "grid", "dot"] },
+          "theme": { "type": "string", "enum": ["light", "dark"] }
+        }
+      }
+    }
+  }
+}

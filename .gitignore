@@ -1,0 +1,7 @@
+# Ignore node_modules in any subfolder
+**/node_modules/
+
+# Optional: Ignore environment variables and build files
+**/dist/
+**/.env
+**/.env.local

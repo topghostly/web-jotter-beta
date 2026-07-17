@@ -1,0 +1,43 @@
+.track {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 232px;
+  padding: 4px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+}
+
+/* A slip of paper sliding inside the ink track. */
+.thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+  background: var(--ink);
+  transition: transform 240ms var(--ease-out);
+}
+
+.track[data-mode="signup"] .thumb {
+  transform: translateX(100%);
+}
+
+.option {
+  position: relative;
+  z-index: 1;
+  border: none;
+  background: none;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color 240ms var(--ease-out);
+}
+
+.option[aria-pressed="true"] {
+  color: var(--paper);
+}

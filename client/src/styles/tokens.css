@@ -1,0 +1,82 @@
+/*
+ * Jotter design tokens — ink on paper.
+ * Every color and type decision in the app derives from these.
+ */
+:root {
+  /* Surfaces */
+  --paper: #fbfaf4;
+  --paper-raised: #ffffff;
+
+  /* Ink */
+  --ink: #111111;
+  --ink-soft: #5b584f;
+  --ink-faint: rgba(17, 17, 17, 0.4);
+  --line: rgba(17, 17, 17, 0.18);
+
+  /* The one color moment */
+  --sticky: #ffe885;
+  --sticky-shadow: #e8ca55;
+  --sticky-ink: #111111;
+
+  /* Note papers */
+  --note-yellow: #ffe885;
+  --note-pink: #ffd9e1;
+  --note-blue: #d3e9f7;
+  --note-mint: #d9f0de;
+  --note-white: #ffffff;
+
+  /* Paper details */
+  --rule-line: rgba(17, 17, 17, 0.14);
+  --grid-line: rgba(17, 17, 17, 0.06);
+  --dot-ink: rgba(17, 17, 17, 0.18);
+  --fold-shade: rgba(17, 17, 17, 0.09);
+
+  /* Feedback */
+  --error: #b4443c;
+  --success: #3f7d4e;
+
+  /* Type */
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-note: "Neucha", "Comic Sans MS", cursive;
+
+  /* Hand-drawn edges: asymmetric radii read as a pen-drawn rectangle */
+  --sketch-radius: 15px 255px 15px 225px / 225px 15px 255px 15px;
+  --sketch-radius-sm: 8px 120px 10px 110px / 110px 8px 120px 10px;
+
+  /* Paper lift */
+  --shadow-paper: 4px 5px 0 rgba(17, 17, 17, 0.07);
+  --shadow-paper-hover: 6px 8px 0 rgba(17, 17, 17, 0.09);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Night desk: dark warm paper, light ink. Set via data-theme on <html>. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #191813;
+  --paper-raised: #211f18;
+
+  --ink: #ecead9;
+  --ink-soft: #a39f8f;
+  --ink-faint: rgba(236, 234, 217, 0.45);
+  --line: rgba(236, 234, 217, 0.22);
+
+  --error: #e07a70;
+  --success: #82c791;
+
+  --note-yellow: #57491e;
+  --note-pink: #543039;
+  --note-blue: #2b4257;
+  --note-mint: #2e4a37;
+  --note-white: #26241c;
+
+  --rule-line: rgba(236, 234, 217, 0.2);
+  --grid-line: rgba(236, 234, 217, 0.09);
+  --dot-ink: rgba(236, 234, 217, 0.26);
+  --fold-shade: rgba(0, 0, 0, 0.32);
+
+  --shadow-paper: 4px 5px 0 rgba(0, 0, 0, 0.35);
+  --shadow-paper-hover: 6px 8px 0 rgba(0, 0, 0, 0.4);
+}

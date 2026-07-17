@@ -1,0 +1,50 @@
+.page {
+  min-height: 100%;
+}
+
+.main {
+  max-width: 2100px;
+  margin: 0 auto;
+  padding: 30px 24px 72px;
+}
+
+.hint {
+  margin: 0 0 20px;
+  text-align: center;
+  font-family: var(--font-note);
+  font-size: 17px;
+  color: var(--error);
+}
+
+/* Masonry: 3 columns of paper, flowing top-to-bottom */
+.board {
+  columns: 4;
+  column-gap: 22px;
+}
+
+@media (max-width: 1000px) {
+  .board {
+    columns: 3;
+  }
+}
+
+@media (max-width: 620px) {
+  .board {
+    columns: 1;
+  }
+}
+
+.empty {
+  margin: 0;
+  padding: 96px 20px;
+  text-align: center;
+  font-family: var(--font-note);
+  font-size: 21px;
+  color: var(--ink-soft);
+}
+
+.retry {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
