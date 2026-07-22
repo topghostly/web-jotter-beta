@@ -1,4 +1,6 @@
 ![Jotter Preview](./client/public/logo.png)
+<img src="./client/public/logo.png" alt="Alternative Text" width="300">
+
 # Jotter
 
 A little sticky-note board for jotting things down. Ink-on-paper design, notes you can drag your eyes across, no clutter.
@@ -9,7 +11,7 @@ React + TypeScript client, talking to an Express/MongoDB API over a cookie sessi
 
 - Sign up / log in — session lives in an httpOnly cookie
 - Create, edit, and delete notes on a board, autosaved as you type
-- Settings: font size, paper style, multicolor notes, light/dark theme
+- Settings: font size, paper style, multicolour notes, light/dark theme
 - Toasts for success and error feedback
 
 ## Running locally
