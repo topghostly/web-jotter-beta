@@ -1,5 +1,4 @@
-![Jotter Preview](./client/public/logo.png)
-<img src="./client/public/logo.png" alt="Alternative Text" width="300">
+<img src="./client/public/logo.png" alt="Alternative Text" width="200">
 
 # Jotter
 
