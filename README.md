@@ -1,4 +1,4 @@
-<img src="./client/public/logo.png" alt="Alternative Text" width="200">
+<img src="./client/public/logo.png" alt="Alternative Text" width="100">
 
 # Jotter
 
