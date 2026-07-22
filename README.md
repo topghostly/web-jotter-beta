@@ -1,3 +1,4 @@
+![Jotter Preview](https://raw.githubusercontent.com/topghostly/web-jotter-beta/tree/main/client/public/logo.png)
 # Jotter
 
 A little sticky-note board for jotting things down. Ink-on-paper design, notes you can drag your eyes across, no clutter.
