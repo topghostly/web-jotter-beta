@@ -3,6 +3,11 @@ import AuthForm from "./AuthForm.tsx";
 import Doodles from "./Doodles.tsx";
 import ModeToggle from "./ModeToggle.tsx";
 import styles from "./AuthPage.module.css";
+import { useEffect, useState } from "react";
+import { api, ApiError } from "../../lib/api.ts";
+import type { MeResponse } from "../../lib/api.ts";
+import { useNavigate } from "react-router-dom";
+
 
 interface AuthPageProps {
   mode: AuthMode;
@@ -14,6 +19,28 @@ const STICKY_NOTE = {
 } as const;
 
 export default function AuthPage({ mode }: AuthPageProps) {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false
+    api<MeResponse>("/me")
+      .then((data) => {
+        if (!cancelled) navigate("/dashboard", { replace: true });
+      })
+      .catch((error: unknown) => {
+        if (cancelled) return;
+        if (error instanceof ApiError && error.status === 401) {
+        } else {
+          setError(
+            error instanceof Error ? error.message : "something went wrong",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   return (
     <main className={styles.page}>
       <Doodles />
@@ -21,8 +48,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
       <div className={styles.column}>
         <header className={styles.brand}>
           <img className={styles.logo} src="/logo.svg" alt="" />
-          {/* <h1 className={styles.wordmark}>Jotter</h1> */}
-          {/* <p className={styles.tagline}>little notes, kept close</p> */}
         </header>
 
         <ModeToggle mode={mode} />

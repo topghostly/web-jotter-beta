@@ -5,6 +5,7 @@ import { HttpError } from "../utils/HttpError.js";
 import { SESSION_COOKIE_NAME } from "../services/auth.service.js";
 
 export async function getMe(req, res) {
+  console.log(req);
   const [user, notes, settings] = await Promise.all([
     User.findById(req.user.id),
     Note.find({ user: req.user.id }).sort({ createdAt: -1 }),

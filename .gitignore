@@ -5,6 +5,7 @@
 **/dist/
 **/.env
 **/.env.local
+./env
 
 # foglamp scan lock (contains a secret edit token)
 .foglamp/
