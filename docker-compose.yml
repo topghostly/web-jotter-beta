@@ -6,7 +6,7 @@ services:
     container_name: jotter_client
     restart: always
     ports:
-      - "3000:5173"
+      - "80:80"
     volumes:
       - ./client:/app
       - /app/node_modules
