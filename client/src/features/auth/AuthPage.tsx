@@ -3,10 +3,11 @@ import AuthForm from "./AuthForm.tsx";
 import Doodles from "./Doodles.tsx";
 import ModeToggle from "./ModeToggle.tsx";
 import styles from "./AuthPage.module.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { api, ApiError } from "../../lib/api.ts";
 import type { MeResponse } from "../../lib/api.ts";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../components/toast/useToast.ts";
 
 
 interface AuthPageProps {
@@ -20,22 +21,21 @@ const STICKY_NOTE = {
 
 export default function AuthPage({ mode }: AuthPageProps) {
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
 
   useEffect(() => {
-    let cancelled = false
+    let cancelled = false;
     api<MeResponse>("/me")
-      .then((data) => {
+      .then(() => {
         if (!cancelled) navigate("/dashboard", { replace: true });
       })
       .catch((error: unknown) => {
         if (cancelled) return;
-        if (error instanceof ApiError && error.status === 401) {
-        } else {
-          setError(
-            error instanceof Error ? error.message : "something went wrong",
-          );
-        }
+        // 401 just means "not logged in" — expected on the auth page.
+        if (error instanceof ApiError && error.status === 401) return;
+        toast.error(
+          error instanceof Error ? error.message : "something went wrong",
+        );
       });
     return () => {
       cancelled = true;
