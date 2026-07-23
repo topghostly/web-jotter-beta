@@ -3,6 +3,7 @@
  * server-side — they're re-randomized on every load, by design.
  */
 import type { ApiNote } from "../../lib/api.ts";
+import { newId } from "../../lib/id.ts";
 import { NOTE_COLORS, PAPER_TYPES, type Note } from "./types.ts";
 
 function pick<T>(options: readonly T[]): T {
@@ -11,7 +12,7 @@ function pick<T>(options: readonly T[]): T {
 
 export function fromApiNote(apiNote: ApiNote): Note {
   return {
-    id: crypto.randomUUID(),
+    id: newId(),
     serverId: apiNote._id,
     body: apiNote.content,
     paper: pick(PAPER_TYPES),
@@ -23,7 +24,7 @@ export function fromApiNote(apiNote: ApiNote): Note {
 /** A brand-new local note; POSTed to the server on its first non-empty save. */
 export function createDraftNote(): Note {
   return {
-    id: crypto.randomUUID(),
+    id: newId(),
     body: "",
     paper: pick(PAPER_TYPES),
     color: pick(NOTE_COLORS),
