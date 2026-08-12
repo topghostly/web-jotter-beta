@@ -17,7 +17,7 @@
   left: 4px;
   width: calc(50% - 4px);
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--accent);
   transition: transform 240ms var(--ease-out);
 }
 

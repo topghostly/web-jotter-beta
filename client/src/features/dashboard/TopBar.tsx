@@ -1,4 +1,4 @@
-import { LogOut, Plus, Trash2 } from "lucide-react";
+import { LogOut, Plus, Search, Trash2, X } from "lucide-react";
 import SettingsMenu from "../settings/SettingsMenu.tsx";
 import type { Settings } from "../settings/settingsStore.ts";
 import styles from "./TopBar.module.css";
@@ -11,6 +11,9 @@ interface TopBarProps {
   onAddNote: () => void;
   onToggleDeleteMode: () => void;
   onLogout: () => void;
+  search: string;
+  onSearchChange: (value: string) => void;
+  noteCount: number;
 }
 
 export default function TopBar({
@@ -21,6 +24,9 @@ export default function TopBar({
   onAddNote,
   onToggleDeleteMode,
   onLogout,
+  search,
+  onSearchChange,
+  noteCount,
 }: TopBarProps) {
   return (
     <header className={styles.bar}>
@@ -28,6 +34,28 @@ export default function TopBar({
         <div className={styles.brand}>
           <img src="/logo.svg" alt="" />
           <span>Jotter</span>
+        </div>
+
+        <div className={styles.search}>
+          <Search size={15} strokeWidth={2} aria-hidden="true" />
+          <input
+            type="search"
+            placeholder="Search notes…"
+            aria-label="Search notes"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+          {search && (
+            <button
+              type="button"
+              className={styles.clearSearch}
+              aria-label="Clear search"
+              onClick={() => onSearchChange("")}
+            >
+              <X size={14} strokeWidth={2} aria-hidden="true" />
+            </button>
+          )}
+          <span className={styles.count}>{noteCount}</span>
         </div>
 
         <div className={styles.actions}>

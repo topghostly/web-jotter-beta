@@ -1,5 +1,5 @@
 import { useEffect, useRef, type KeyboardEvent } from "react";
-import type { Note, NoteColor, PaperType } from "./types.ts";
+import type { Note, NoteColor, NoteShape, PaperType } from "./types.ts";
 import styles from "./NoteCard.module.css";
 
 interface NoteCardProps {
@@ -7,6 +7,7 @@ interface NoteCardProps {
   /** What to render — may differ from the note's own paper/color per settings. */
   paper: PaperType;
   color: NoteColor;
+  shape: NoteShape;
   deleteMode: boolean;
   removing?: boolean;
   justAdded?: boolean;
@@ -26,6 +27,7 @@ export default function NoteCard({
   note,
   paper,
   color,
+  shape,
   deleteMode,
   removing,
   justAdded,
@@ -63,6 +65,7 @@ export default function NoteCard({
       className={className}
       data-paper={paper}
       data-color={color}
+      data-shape={shape}
       onClick={deleteMode ? onDelete : undefined}
       onKeyDown={deleteMode ? handleDeleteKey : undefined}
       role={deleteMode ? "button" : undefined}

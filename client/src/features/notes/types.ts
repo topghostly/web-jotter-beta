@@ -4,6 +4,15 @@ export type PaperType = (typeof PAPER_TYPES)[number];
 export const NOTE_COLORS = ["yellow", "pink", "blue", "mint", "white"] as const;
 export type NoteColor = (typeof NOTE_COLORS)[number];
 
+export const NOTE_SHAPES = [
+  "clipped-corner",
+  "soft-curl",
+  "uneven-bottom",
+  "angled-top",
+  "plain-refined",
+] as const;
+export type NoteShape = (typeof NOTE_SHAPES)[number];
+
 export interface Note {
   /** Client-generated id — the stable React key, even before the server knows the note. */
   id: string;
@@ -12,5 +21,6 @@ export interface Note {
   body: string;
   paper: PaperType;
   color: NoteColor;
+  shape: NoteShape;
   createdAt: number;
 }

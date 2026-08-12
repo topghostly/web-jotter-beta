@@ -4,7 +4,7 @@
  */
 import type { ApiNote } from "../../lib/api.ts";
 import { newId } from "../../lib/id.ts";
-import { NOTE_COLORS, PAPER_TYPES, type Note } from "./types.ts";
+import { NOTE_COLORS, NOTE_SHAPES, PAPER_TYPES, type Note } from "./types.ts";
 
 function pick<T>(options: readonly T[]): T {
   return options[Math.floor(Math.random() * options.length)];
@@ -17,6 +17,7 @@ export function fromApiNote(apiNote: ApiNote): Note {
     body: apiNote.content,
     paper: pick(PAPER_TYPES),
     color: pick(NOTE_COLORS),
+    shape: pick(NOTE_SHAPES),
     createdAt: Date.parse(apiNote.createdAt),
   };
 }
@@ -28,6 +29,7 @@ export function createDraftNote(): Note {
     body: "",
     paper: pick(PAPER_TYPES),
     color: pick(NOTE_COLORS),
+    shape: pick(NOTE_SHAPES),
     createdAt: Date.now(),
   };
 }

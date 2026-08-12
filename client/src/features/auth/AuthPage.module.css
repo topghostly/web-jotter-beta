@@ -44,18 +44,19 @@
   color: var(--ink-soft);
 }
 
-/* The form card: a sheet of paper with pen-drawn edges. */
+/* The form card: a clean sheet of paper, refined edges. */
 .card {
   position: relative;
   width: 100%;
   padding: 34px 30px 30px;
   background: var(--paper-raised);
-  border: 1.5px solid var(--ink);
-  border-radius: var(--sketch-radius);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow-paper);
 }
 
-/* Signature: a sticky note taped to the card, message follows the toggle. */
+/* Signature: a sticky note taped to the card, message follows the toggle.
+   Shares the "clipped corner" shape and gold fill from the note-card family. */
 .sticky {
   position: absolute;
   top: -16px;
@@ -63,15 +64,13 @@
   transform: rotate(4deg);
   padding: 12px 14px 14px;
   max-width: 150px;
-  background: var(--sticky);
-  border-radius: 2px 2px 14px 2px / 2px 2px 12px 2px;
-  box-shadow:
-    0 4px 0 -2px var(--sticky-shadow),
-    3px 5px 8px rgba(17, 17, 17, 0.1);
+  background: var(--note-yellow);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  box-shadow: var(--shadow-paper);
   font-family: var(--font-note);
   font-size: 15.5px;
   line-height: 1.25;
-  color: var(--sticky-ink);
+  color: var(--note-ink-dark);
   animation: stick-on 320ms var(--ease-out);
 }
 

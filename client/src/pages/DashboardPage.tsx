@@ -95,6 +95,13 @@ function Dashboard({ me }: { me: MeResponse }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [lastAddedId, setLastAddedId] = useState<string | null>(null);
   const [removingIds, setRemovingIds] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
+
+  const visibleNotes = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return notes;
+    return notes.filter((note) => note.body.toLowerCase().includes(query));
+  }, [notes, search]);
 
   useEffect(() => {
     if (!deleteMode) return;
@@ -146,10 +153,13 @@ function Dashboard({ me }: { me: MeResponse }) {
         onAddNote={handleAddNote}
         onToggleDeleteMode={() => setDeleteMode((on) => !on)}
         onLogout={handleLogout}
+        search={search}
+        onSearchChange={setSearch}
+        noteCount={visibleNotes.length}
       />
 
       <main className={styles.main}>
-        {deleteMode && notes.length > 0 && (
+        {deleteMode && visibleNotes.length > 0 && (
           <p className={styles.hint}>tap a note to tear it off the board</p>
         )}
 
@@ -157,9 +167,11 @@ function Dashboard({ me }: { me: MeResponse }) {
           <p className={styles.empty}>
             an empty board — press “New note” and jot something down
           </p>
+        ) : visibleNotes.length === 0 ? (
+          <p className={styles.empty}>no notes match “{search.trim()}”</p>
         ) : (
           <div className={styles.board} style={boardStyle}>
-            {notes.map((note) => (
+            {visibleNotes.map((note) => (
               <NoteCard
                 key={note.id}
                 note={note}
@@ -167,6 +179,7 @@ function Dashboard({ me }: { me: MeResponse }) {
                   settings.paper === "random" ? note.paper : settings.paper
                 }
                 color={settings.multicolor ? note.color : "white"}
+                shape={note.shape}
                 deleteMode={deleteMode}
                 removing={removingIds.includes(note.id)}
                 justAdded={note.id === lastAddedId}

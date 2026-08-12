@@ -6,23 +6,11 @@
   margin-bottom: 22px;
   padding: 18px 18px 12px;
   background-color: var(--note-white);
-  border: 1.5px solid var(--ink);
-  border-radius: var(--sketch-radius-sm);
+  border-radius: 6px;
   box-shadow: var(--shadow-paper);
   transition:
     background-color 240ms var(--ease-out),
-    border-color 240ms var(--ease-out);
-}
-
-/* Folded corner */
-.card::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 22px;
-  height: 22px;
-  background: linear-gradient(to top left, var(--fold-shade) 49%, transparent 51%);
+    color 240ms var(--ease-out);
 }
 
 /* Slight pinned-by-hand tilts across the board */
@@ -34,9 +22,90 @@
   rotate: -0.7deg;
 }
 
+/* ——— Edge shapes: each note gets its own quiet contour ——— */
+
+.card[data-shape="clipped-corner"] {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+
+.card[data-shape="soft-curl"] {
+  border-radius: 0;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%
+  );
+}
+
+/* The lifted corner the curl leaves behind */
+.card[data-shape="soft-curl"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(135deg, transparent 50%, var(--fold-shade) 50%);
+  clip-path: polygon(100% 100%, 0 100%, 100% 0);
+}
+
+.card[data-shape="uneven-bottom"] {
+  border-radius: 0;
+  padding-bottom: 18px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 10px),
+    85% 100%,
+    60% calc(100% - 8px),
+    35% 100%,
+    12% calc(100% - 6px),
+    0 100%
+  );
+}
+
+.card[data-shape="angled-top"] {
+  border-radius: 0;
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%, 0 16px);
+}
+
+.card[data-shape="plain-refined"] {
+  border-radius: 6px;
+}
+
 /* ——— Paper colors ——— */
 .card[data-color="yellow"] {
   background-color: var(--note-yellow);
+  color: var(--note-ink-dark);
+}
+
+.card[data-color="yellow"] .body:empty::before,
+.card[data-color="yellow"] .date {
+  color: var(--note-ink-dark-faint);
+}
+
+.card[data-color="pink"],
+.card[data-color="blue"],
+.card[data-color="mint"] {
+  color: var(--note-ink-light);
+}
+
+.card[data-color="pink"] .body,
+.card[data-color="blue"] .body,
+.card[data-color="mint"] .body {
+  caret-color: var(--note-ink-light);
+}
+
+.card[data-color="pink"] .body:empty::before,
+.card[data-color="blue"] .body:empty::before,
+.card[data-color="mint"] .body:empty::before,
+.card[data-color="pink"] .date,
+.card[data-color="blue"] .date,
+.card[data-color="mint"] .date {
+  color: var(--note-ink-light-faint);
 }
 
 .card[data-color="pink"] {

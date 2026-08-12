@@ -13,17 +13,25 @@
   --ink-faint: rgba(17, 17, 17, 0.4);
   --line: rgba(17, 17, 17, 0.18);
 
-  /* The one color moment */
-  --sticky: #ffe885;
-  --sticky-shadow: #e8ca55;
-  --sticky-ink: #111111;
+  /* Primary action color — buttons, focus states, the search affordance */
+  --accent: #1f3a5f;
+  --accent-hover: #2c4d76;
+  --accent-active: #16293f;
+  --accent-ink: #fdfbf6;
 
-  /* Note papers */
-  --note-yellow: #ffe885;
-  --note-pink: #ffd9e1;
-  --note-blue: #d3e9f7;
-  --note-mint: #d9f0de;
+  /* Note papers — vivid jewel tones */
+  --note-yellow: #f4c430;
+  --note-pink: #e0335f;
+  --note-blue: #2f6fd6;
+  --note-mint: #1fa066;
   --note-white: #ffffff;
+
+  /* Text on note fills: fixed pairs, independent of theme, since the
+     fills themselves stay mid-to-dark toned in both light and dark mode. */
+  --note-ink-dark: #241900;
+  --note-ink-dark-faint: rgba(36, 25, 0, 0.55);
+  --note-ink-light: #fdfbf6;
+  --note-ink-light-faint: rgba(253, 251, 246, 0.6);
 
   /* Paper details */
   --rule-line: rgba(17, 17, 17, 0.14);
@@ -39,9 +47,9 @@
   --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-note: "Neucha", "Comic Sans MS", cursive;
 
-  /* Hand-drawn edges: asymmetric radii read as a pen-drawn rectangle */
-  --sketch-radius: 15px 255px 15px 225px / 225px 15px 255px 15px;
-  --sketch-radius-sm: 8px 120px 10px 110px / 110px 8px 120px 10px;
+  /* Clean chrome edges — buttons, panels, page-level cards */
+  --radius-card: 20px;
+  --radius-chrome: 12px;
 
   /* Paper lift */
   --shadow-paper: 4px 5px 0 rgba(17, 17, 17, 0.07);
@@ -66,10 +74,14 @@
   --error: #e07a70;
   --success: #82c791;
 
-  --note-yellow: #57491e;
-  --note-pink: #543039;
-  --note-blue: #2b4257;
-  --note-mint: #2e4a37;
+  --accent: #35578a;
+  --accent-hover: #4067a0;
+  --accent-active: #294670;
+
+  --note-yellow: #caa23c;
+  --note-pink: #b23a58;
+  --note-blue: #3a6bb0;
+  --note-mint: #2b8a5f;
   --note-white: #26241c;
 
   --rule-line: rgba(236, 234, 217, 0.2);

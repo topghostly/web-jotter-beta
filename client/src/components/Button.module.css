@@ -1,9 +1,9 @@
 .button {
   appearance: none;
-  border: 1.5px solid var(--ink);
-  border-radius: var(--sketch-radius-sm);
-  background: var(--ink);
-  color: var(--paper);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-chrome);
+  background: var(--accent);
+  color: var(--accent-ink);
   font-size: 16px;
   font-weight: 600;
   padding: 12px 18px;

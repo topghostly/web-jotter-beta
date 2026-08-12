@@ -22,7 +22,7 @@
   padding: 12px 14px;
   background: var(--paper-raised);
   border: 1px solid var(--line);
-  border-radius: var(--sketch-radius-sm);
+  border-radius: var(--radius-chrome);
   box-shadow: var(--shadow-paper);
   color: var(--ink);
   font-family: var(--font-ui);
